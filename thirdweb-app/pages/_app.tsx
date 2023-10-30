@@ -5,7 +5,7 @@ import "../styles/globals.css";
 // This is the chain your dApp will work on.
 // Change this to the chain your app is built for.
 // You can also import additional chains from `@thirdweb-dev/chains` and pass them directly.
-const activeChain = "base-goerli";
+const activeChain = "mumbai";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -29,6 +29,3 @@ export default MyApp;
 
 // issue
 // cannot read properties of undefined (reading 'openzeppelinForwarder')
-// guess contract forwarder stuff
-// import {ERC2771Context} from "lib/openzeppelin-contracts/contracts/metatx/ERC2771Context.sol"; remap
-// constructor(address t) ERC2771Context(t) {_trustedForwarder = t;} what is forwarder t?

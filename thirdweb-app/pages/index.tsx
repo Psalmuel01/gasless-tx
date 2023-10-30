@@ -10,8 +10,9 @@ import { abi } from "../constants/abi";
 import { useState } from "react";
 
 const Home: NextPage = () => {
-  const deployedAddresses = "0x6e73e8D0625D563E0c43a41d65FA8B79AE284d36";
+  const deployedAddresses = "0x889179b0589ce1396c54cc686c3b539725e8181a";
   const { contract } = useContract(deployedAddresses);
+  console.log("contract", contract);
   const [lastUser, setLastUser] = useState("");
   const { data, isLoading, error } = useContractRead(
     contract,

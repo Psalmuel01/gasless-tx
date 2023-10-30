@@ -16,14 +16,14 @@ import styles from "@/styles/Home.module.css";
 
 const bundler: IBundler = new Bundler({
   bundlerUrl:
-    "https://bundler.biconomy.io/api/v2/84531/nJPK7B3ru.dd7f7861-190d-41bd-af80-6877f74b8f44", // you can get this value from biconomy dashboard.
+    "https://bundler.biconomy.io/api/v2/80001/nJPK7B3ru.dd7f7861-190d-41bd-af80-6877f74b8f44", // you can get this value from biconomy dashboard.
   chainId: ChainId.POLYGON_MUMBAI,
   entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
 });
 
 const paymaster: IPaymaster = new BiconomyPaymaster({
   paymasterUrl:
-    "https://paymaster.biconomy.io/api/v1/84531/XaAweoeKf.19f8ccc7-6308-4274-803d-f6b6eba587d1",
+    "https://paymaster.biconomy.io/api/v1/80001/g5bnsNQJq.72445bf6-4e46-4e70-be24-6f6e6f18d54a",
 });
 
 export default function Home() {
@@ -120,7 +120,7 @@ export default function Home() {
 
   return (
     <div>
-      <h1> Biconomy Counter + Gasless Transactions</h1>
+      <h1> Biconomy Gasless Counter</h1>
 
       {!smartAccount && !loading && <button onClick={login}>Login</button>}
       {loading && <p>Loading account details...</p>}
