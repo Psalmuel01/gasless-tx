@@ -34,7 +34,7 @@ const Counter: React.FC<Props> = ({ smartAccount, provider }) => {
   const getCount = async (isUpdating: boolean) => {
     const contract = new ethers.Contract(counterAddress, abi, provider);
     setCounterContract(contract);
-    const currentCount = await contract.count();
+    const currentCount = await contract.number();
     setCount(currentCount.toNumber());
     if (isUpdating) {
       toast.success("Count has been updated!", {
@@ -50,7 +50,7 @@ const Counter: React.FC<Props> = ({ smartAccount, provider }) => {
     }
   };
 
-  const incrementCount = async () => {
+  const incrementNumber = async () => {
     try {
       toast.info("Processing count on the blockchain!", {
         position: "top-right",
@@ -63,10 +63,89 @@ const Counter: React.FC<Props> = ({ smartAccount, provider }) => {
         theme: "dark",
       });
 
-      const incrementTx = new ethers.utils.Interface([
-        "function incrementCount()",
-      ]);
-      const data = incrementTx.encodeFunctionData("incrementCount");
+      const incrementTx = new ethers.utils.Interface(["function increment()"]);
+      const data = incrementTx.encodeFunctionData("increment");
+
+      const tx1 = {
+        to: counterAddress,
+        data: data,
+      };
+
+      let partialUserOp = await smartAccount.buildUserOp([tx1]);
+
+      const biconomyPaymaster =
+        smartAccount.paymaster as IHybridPaymaster<SponsorUserOperationDto>;
+
+      let paymasterServiceData: SponsorUserOperationDto = {
+        mode: PaymasterMode.SPONSORED,
+        smartAccountInfo: {
+          name: "BICONOMY",
+          version: "2.0.0",
+        },
+        // optional params...
+      };
+
+      try {
+        const paymasterAndDataResponse =
+          await biconomyPaymaster.getPaymasterAndData(
+            partialUserOp,
+            paymasterServiceData
+          );
+        partialUserOp.paymasterAndData =
+          paymasterAndDataResponse.paymasterAndData;
+
+        const userOpResponse = await smartAccount.sendUserOp(partialUserOp);
+        const transactionDetails = await userOpResponse.wait();
+
+        console.log("Transaction Details:", transactionDetails);
+        console.log("Transaction Hash:", userOpResponse.userOpHash);
+
+        toast.success(`Transaction Hash: ${userOpResponse.userOpHash}`, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+
+        getCount(true);
+      } catch (e) {
+        console.error("Error executing transaction:", e);
+        // ... handle the error if needed ...
+      }
+    } catch (error) {
+      console.error("Error executing transaction:", error);
+      toast.error("Error occurred, check the console", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
+  };
+
+  const decrementNumber = async () => {
+    try {
+      toast.info("Processing count on the blockchain!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+
+      const decrementTx = new ethers.utils.Interface(["function decrement()"]);
+      const data = decrementTx.encodeFunctionData("decrement");
 
       const tx1 = {
         to: counterAddress,
@@ -149,7 +228,8 @@ const Counter: React.FC<Props> = ({ smartAccount, provider }) => {
         theme="dark"
       />
       <br></br>
-      <button onClick={() => incrementCount()}>Increment Count</button>
+      <button onClick={() => incrementNumber()}>Increment Number</button>
+      <button onClick={() => decrementNumber()}>Decrement Number</button>
     </>
   );
 };

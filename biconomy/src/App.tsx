@@ -1,5 +1,5 @@
 import "./App.css";
-import "@Biconomy/web3-auth/dist/src/style.css";
+import "@biconomy/web3-auth/dist/src/style.css";
 import { useState, useEffect, useRef } from "react";
 import SocialLogin from "@biconomy/web3-auth";
 import { ChainId } from "@biconomy/core-types";
@@ -16,14 +16,14 @@ import styles from "@/styles/Home.module.css";
 
 const bundler: IBundler = new Bundler({
   bundlerUrl:
-    "https://bundler.biconomy.io/api/v2/80001/nJPK7B3ru.dd7f7861-190d-41bd-af80-6877f74b8f44", // you can get this value from biconomy dashboard.
+    "https://bundler.biconomy.io/api/v2/84531/nJPK7B3ru.dd7f7861-190d-41bd-af80-6877f74b8f44", // you can get this value from biconomy dashboard.
   chainId: ChainId.POLYGON_MUMBAI,
   entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
 });
 
 const paymaster: IPaymaster = new BiconomyPaymaster({
   paymasterUrl:
-    "https://paymaster.biconomy.io/api/v1/80001/cIhIeS-I0.7e1f17b1-6ebb-454c-8499-c5f66dd098c6",
+    "https://paymaster.biconomy.io/api/v1/84531/XaAweoeKf.19f8ccc7-6308-4274-803d-f6b6eba587d1",
 });
 
 export default function Home() {
@@ -120,10 +120,7 @@ export default function Home() {
 
   return (
     <div>
-      <h1>
-        {" "}
-        Biconomy Smart Accounts using social login + Gasless Transactions
-      </h1>
+      <h1> Biconomy Counter + Gasless Transactions</h1>
 
       {!smartAccount && !loading && <button onClick={login}>Login</button>}
       {loading && <p>Loading account details...</p>}
@@ -135,16 +132,9 @@ export default function Home() {
           <button onClick={logout}>Logout</button>
         </div>
       )}
-      <p>
-        Edit <code>src/App.tsx</code> and save to test
-      </p>
-      <a
-        href="https://docs.biconomy.io/docs/overview"
-        target="_blank"
-        className="read-the-docs"
-      >
-        Click here to check out the docs
-      </a>
     </div>
   );
 }
+
+// POLYGON_MUMBAI to BASE_GOERLI_TESTNET login issues
+// not incrementing/decrementing
